@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../config/app_theme.dart';
 import '../services/auth_service.dart';
 
 /// SignInScreen - Matches TypeScript sign-in.tsx exactly
+/// Uses Firebase Auth with Google OAuth (same as Clerk Google OAuth)
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
@@ -26,6 +26,15 @@ class _SignInScreenState extends State<SignInScreen> {
     super.dispose();
   }
 
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
   Future<void> _handleSignIn() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
@@ -41,9 +50,10 @@ class _SignInScreenState extends State<SignInScreen> {
       final authService = context.read<AuthService>();
       final success = await authService.signInWithEmail(email, password);
 
-      if (success && mounted) {
-        Navigator.pushReplacementNamed(context, '/onboarding');
+      if (!success && mounted) {
+        _showError('Sign in failed. Please check your credentials.');
       }
+      // If successful, AuthWrapper will automatically navigate
     } catch (e) {
       _showError(e.toString());
     } finally {
@@ -58,9 +68,10 @@ class _SignInScreenState extends State<SignInScreen> {
       final authService = context.read<AuthService>();
       final success = await authService.signInWithGoogle();
 
-      if (success && mounted) {
-        Navigator.pushReplacementNamed(context, '/onboarding');
+      if (!success && mounted) {
+        _showError('Google sign in failed. Please try again.');
       }
+      // If successful, AuthWrapper will automatically navigate
     } catch (e) {
       _showError(e.toString());
     } finally {
@@ -68,21 +79,12 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          // Background image - matching TypeScript ImageBackground
+          // Background image - matching TypeScript ImageBackground with runner.jpg
           image: DecorationImage(
             image: AssetImage('assets/images/runner.jpg'),
             fit: BoxFit.cover,

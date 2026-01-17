@@ -1,92 +1,92 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 import 'config/app_theme.dart';
 import 'config/firebase_config.dart';
 import 'services/auth_service.dart';
 import 'screens/splash_screen.dart';
-import 'screens/home_screen.dart';
 import 'screens/sign_in_screen.dart';
 import 'screens/onboarding_screen.dart';
+import 'screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize Firebase with options
+  // Initialize Firebase (matching TypeScript Firebase config)
   await Firebase.initializeApp(
     options: FirebaseConfig.currentPlatform,
   );
   
-  // Set preferred orientations
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-
-  // Set system UI overlay style
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: AppTheme.backgroundColor,
-      systemNavigationBarIconBrightness: Brightness.light,
-    ),
-  );
-
   runApp(const KaptureApp());
 }
 
+/// KaptureApp - Main app with authentication
+/// Matches TypeScript _layout.tsx auth flow
 class KaptureApp extends StatelessWidget {
   const KaptureApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => AuthService()),
-      ],
+    return ChangeNotifierProvider(
+      create: (_) => AuthService(),
       child: MaterialApp(
         title: 'Kapture',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.darkTheme,
         home: const AuthWrapper(),
         routes: {
-          '/home': (context) => const HomeScreen(),
           '/sign-in': (context) => const SignInScreen(),
+          '/sign-up': (context) => const SignUpPlaceholder(),
           '/onboarding': (context) => const OnboardingScreen(),
+          '/home': (context) => const HomeScreen(),
         },
       ),
     );
   }
 }
 
+/// AuthWrapper - Conditionally shows screens based on auth state
+/// Matches TypeScript useAuth().isSignedIn pattern from Clerk
 class AuthWrapper extends StatelessWidget {
   const AuthWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthService>(
-      builder: (context, authService, _) {
-        // Show splash while checking auth state
-        if (authService.isLoading) {
-          return const SplashScreen();
-        }
-
-        // Not authenticated - show sign in
-        if (!authService.isAuthenticated) {
-          return const SignInScreen();
-        }
-
-        // Authenticated but needs onboarding
-        if (!authService.isOnboardingComplete) {
-          return const OnboardingScreen();
-        }
-
-        // Fully authenticated
+    final authService = context.watch<AuthService>();
+    
+    // Loading state - show splash
+    if (authService.isLoading) {
+      return const SplashScreen();
+    }
+    
+    // Check if user is authenticated
+    if (authService.isAuthenticated) {
+      // Check if onboarding is complete
+      if (authService.isOnboardingComplete) {
         return const HomeScreen();
-      },
+      } else {
+        return const OnboardingScreen();
+      }
+    }
+    
+    // Not authenticated - show sign in
+    return const SignInScreen();
+  }
+}
+
+/// Sign up placeholder - will implement later
+class SignUpPlaceholder extends StatelessWidget {
+  const SignUpPlaceholder({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Sign Up')),
+      body: const Center(
+        child: Text('Sign up coming soon'),
+      ),
     );
   }
 }
