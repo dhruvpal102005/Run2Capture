@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-
-import '../config/app_theme.dart';
 import '../widgets/dashboard/globe_3d_webview.dart';
 import '../widgets/dashboard/bottom_sheet.dart';
 import '../widgets/dashboard/top_nav_bar.dart';
@@ -19,10 +17,9 @@ class PlayScreen extends StatefulWidget {
 class _PlayScreenState extends State<PlayScreen> {
   double? _userLat;
   double? _userLng;
-  String? _locationError;
   String _activeTab = 'single'; // 'lobby' | 'single' | 'club'
-  String _activeSheetTab = 'leaderboard'; // 'leaderboard' | 'events' | 'territories' | 'history'
-
+  String _activeSheetTab =
+      'leaderboard'; // 'leaderboard' | 'events' | 'territories' | 'history'
   final GlobalKey<Globe3DWebViewState> _globeKey = GlobalKey();
 
   @override
@@ -34,10 +31,9 @@ class _PlayScreenState extends State<PlayScreen> {
   Future<void> _requestLocationAndGetPosition() async {
     try {
       final permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever) {
+      if (permission == LocationPermission.denied) {
+        // Handle denied
         setState(() {
-          _locationError = 'Location permission denied';
           // Default to Mumbai
           _userLat = 19.076;
           _userLng = 72.8777;
@@ -80,23 +76,9 @@ class _PlayScreenState extends State<PlayScreen> {
           // Safe area content overlay
           SafeArea(
             child: Stack(
+              clipBehavior: Clip.none,
               children: [
-                // Top section
-                Column(
-                  children: [
-                    const SizedBox(height: 40),
-                    // Notification bell - top left
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: _buildNotificationButton(),
-                      ),
-                    ),
-                  ],
-                ),
-
-                // Top navigation tabs - matching TypeScript TopNavBar
+                // Top navigation tabs - starts at padding 40 in TS
                 Positioned(
                   top: 40,
                   left: 0,
@@ -107,7 +89,14 @@ class _PlayScreenState extends State<PlayScreen> {
                   ),
                 ),
 
-                // My runs label - matching TypeScript myRunsContainer
+                // Notification bell - matching TS absolute top: 70, left: 16
+                Positioned(
+                  top: 70,
+                  left: 16,
+                  child: _buildNotificationButton(),
+                ),
+
+                // My runs label - matching TS absolute top: 130, left: 16
                 const Positioned(
                   top: 130,
                   left: 16,
@@ -121,15 +110,16 @@ class _PlayScreenState extends State<PlayScreen> {
                   ),
                 ),
 
-                // Side action buttons - matching TypeScript SideActionButtons
+                // Side action buttons - matching TS component absolute top: 100, right: 16
                 Positioned(
+                  top: 100,
                   right: 16,
-                  top: 180,
                   child: SideActionButtons(
                     onHelpPress: () {
                       // Zoom to user's location when question mark button is pressed
                       if (_userLat != null && _userLng != null) {
-                        _globeKey.currentState?.zoomToLocation(_userLat!, _userLng!);
+                        _globeKey.currentState
+                            ?.zoomToLocation(_userLat!, _userLng!);
                       }
                     },
                   ),
@@ -162,7 +152,9 @@ class _PlayScreenState extends State<PlayScreen> {
   Widget _buildNotificationButton() {
     return GestureDetector(
       onTap: () {
-        // TODO: Open notifications
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Notifications coming soon')),
+        );
       },
       child: Container(
         width: 44,

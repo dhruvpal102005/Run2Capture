@@ -19,7 +19,7 @@ class RunStatsPanel extends StatelessWidget {
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceColor.withOpacity(0.95),
+        color: AppTheme.surfaceColor.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppTheme.borderColor, width: 0.5),
       ),
@@ -32,7 +32,7 @@ class RunStatsPanel extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               margin: const EdgeInsets.only(bottom: 16),
               decoration: BoxDecoration(
-                color: AppTheme.warningColor.withOpacity(0.2),
+                color: AppTheme.warningColor.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Row(

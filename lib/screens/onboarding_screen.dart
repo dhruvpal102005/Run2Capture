@@ -156,7 +156,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               borderRadius: BorderRadius.circular(30),
               boxShadow: [
                 BoxShadow(
-                  color: AppTheme.primaryColor.withOpacity(0.4),
+                  color: AppTheme.primaryColor.withValues(alpha: 0.4),
                   blurRadius: 40,
                   spreadRadius: 5,
                 ),
@@ -182,7 +182,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Text(
             'Run, capture territory, and compete with runners worldwide. Every run is a chance to claim your space on the global map.',
             style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontSize: 16,
               height: 1.5,
             ),
@@ -225,7 +225,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withOpacity(0.1),
+              color: AppTheme.primaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: AppTheme.primaryColor),
@@ -247,7 +247,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.6),
+                    color: Colors.white.withValues(alpha: 0.6),
                     fontSize: 13,
                   ),
                 ),
@@ -283,7 +283,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Text(
             'Select how you want to measure your runs',
             style: TextStyle(
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withValues(alpha: 0.6),
               fontSize: 14,
             ),
           ),
@@ -312,7 +312,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.primaryColor.withOpacity(0.1) : AppTheme.surfaceColor,
+          color: isSelected
+              ? AppTheme.primaryColor.withValues(alpha: 0.1)
+              : AppTheme.surfaceColor,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected ? AppTheme.primaryColor : AppTheme.borderColor,
@@ -342,7 +344,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Text(
               subtitle,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.5),
+                color: Colors.white.withValues(alpha: 0.5),
                 fontSize: 12,
               ),
             ),
@@ -366,7 +368,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Color(int.parse(_selectedColor.replaceFirst('#', '0xFF'))).withOpacity(0.4),
+                  color:
+                      Color(int.parse(_selectedColor.replaceFirst('#', '0xFF')))
+                          .withValues(alpha: 0.4),
                   blurRadius: 20,
                   spreadRadius: 2,
                 ),
@@ -387,7 +391,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Text(
             'This color will represent your captured territory on the map',
             style: TextStyle(
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withValues(alpha: 0.6),
               fontSize: 14,
             ),
             textAlign: TextAlign.center,
@@ -415,7 +419,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     boxShadow: isSelected
                         ? [
                             BoxShadow(
-                              color: Color(int.parse(color.replaceFirst('#', '0xFF'))).withOpacity(0.5),
+                              color: Color(int.parse(
+                                      color.replaceFirst('#', '0xFF')))
+                                  .withValues(alpha: 0.5),
                               blurRadius: 15,
                               spreadRadius: 2,
                             ),

@@ -18,7 +18,7 @@ class PostRunModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppTheme.backgroundColor.withOpacity(0.95),
+      color: AppTheme.backgroundColor.withValues(alpha: 0.95),
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -84,16 +84,19 @@ class PostRunModal extends StatelessWidget {
               if (stats.capturedPolygon?.isLoop == true)
                 Container(
                   margin: const EdgeInsets.only(top: 16),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   decoration: BoxDecoration(
-                    color: AppTheme.successColor.withOpacity(0.1),
+                    color: AppTheme.successColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppTheme.successColor.withOpacity(0.3)),
+                    border: Border.all(
+                        color: AppTheme.successColor.withValues(alpha: 0.3)),
                   ),
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.check_circle, color: AppTheme.successColor, size: 18),
+                      Icon(Icons.check_circle,
+                          color: AppTheme.successColor, size: 18),
                       SizedBox(width: 8),
                       Text(
                         'Perfect Loop! Maximum area captured',
@@ -115,8 +118,10 @@ class PostRunModal extends StatelessWidget {
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: onDiscard,
-                      icon: const Icon(Icons.delete_outline, color: AppTheme.errorColor),
-                      label: const Text('Discard', style: TextStyle(color: AppTheme.errorColor)),
+                      icon: const Icon(Icons.delete_outline,
+                          color: AppTheme.errorColor),
+                      label: const Text('Discard',
+                          style: TextStyle(color: AppTheme.errorColor)),
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: AppTheme.errorColor),
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -156,8 +161,8 @@ class PostRunModal extends StatelessWidget {
           width: 44,
           height: 44,
           decoration: BoxDecoration(
-            color: isHighlighted 
-                ? AppTheme.primaryColor.withOpacity(0.1)
+            color: isHighlighted
+                ? AppTheme.primaryColor.withValues(alpha: 0.1)
                 : AppTheme.backgroundColor,
             borderRadius: BorderRadius.circular(12),
           ),

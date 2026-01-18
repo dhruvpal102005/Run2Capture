@@ -24,9 +24,9 @@ class _LeaderboardViewState extends State<LeaderboardView> {
 
   Future<void> _loadLeaderboard() async {
     setState(() => _isLoading = true);
-    
+
     final entries = await _leaderboardService.getAreaLeaderboard();
-    
+
     if (mounted) {
       setState(() {
         _entries = entries;
@@ -53,7 +53,7 @@ class _LeaderboardViewState extends State<LeaderboardView> {
             Icon(
               Icons.leaderboard_outlined,
               size: 48,
-              color: AppTheme.textMuted.withOpacity(0.5),
+              color: AppTheme.textMuted.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -91,10 +91,10 @@ class _LeaderboardViewState extends State<LeaderboardView> {
 
   Widget _buildLeaderboardItem(LeaderboardEntry entry) {
     final isTopThree = entry.rank <= 3;
-    
+
     Color? rankColor;
     IconData? rankIcon;
-    
+
     switch (entry.rank) {
       case 1:
         rankColor = const Color(0xFFFFD700); // Gold
@@ -114,8 +114,8 @@ class _LeaderboardViewState extends State<LeaderboardView> {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isTopThree 
-            ? rankColor?.withOpacity(0.1)
+        color: isTopThree
+            ? rankColor?.withValues(alpha: 0.1)
             : AppTheme.backgroundColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
@@ -148,8 +148,8 @@ class _LeaderboardViewState extends State<LeaderboardView> {
             height: 40,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: isTopThree 
-                    ? [rankColor!, rankColor.withOpacity(0.6)]
+                colors: isTopThree
+                    ? [rankColor!, rankColor.withValues(alpha: 0.6)]
                     : AppTheme.territoryGradient,
               ),
               borderRadius: BorderRadius.circular(20),
@@ -213,7 +213,7 @@ class _LeaderboardViewState extends State<LeaderboardView> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withOpacity(0.1),
+              color: AppTheme.primaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(

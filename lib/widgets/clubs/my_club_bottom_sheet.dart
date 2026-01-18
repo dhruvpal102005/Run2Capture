@@ -28,7 +28,7 @@ class MyClubBottomSheet extends StatelessWidget {
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 20,
               offset: const Offset(0, -5),
             ),
@@ -56,7 +56,7 @@ class MyClubBottomSheet extends StatelessWidget {
                 Icon(
                   Icons.groups_outlined,
                   size: 64,
-                  color: AppTheme.textMuted.withOpacity(0.5),
+                  color: AppTheme.textMuted.withValues(alpha: 0.5),
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -94,7 +94,10 @@ class MyClubBottomSheet extends StatelessWidget {
                   width: double.infinity,
                   child: OutlinedButton.icon(
                     onPressed: () {
-                      // TODO: Browse clubs
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Club browsing coming soon')),
+                      );
                     },
                     icon: const Icon(Icons.explore),
                     label: const Text('Browse Clubs'),

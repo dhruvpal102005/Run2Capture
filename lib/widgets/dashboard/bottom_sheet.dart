@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
 import '../../config/app_theme.dart';
-import '../../services/leaderboard_service.dart';
-import '../../models/models.dart';
 import 'leaderboard_view.dart';
 
 class DraggableBottomSheet extends StatefulWidget {
@@ -21,12 +18,11 @@ class DraggableBottomSheet extends StatefulWidget {
 
 class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
   // Sheet positions (fraction of screen height)
-  static const double _peek = 0.12;   // Just showing tabs
-  static const double _half = 0.45;   // Half screen
-  static const double _full = 0.9;    // Almost full
+  static const double _peek = 0.12; // Just showing tabs
+  static const double _half = 0.45; // Half screen
+  static const double _full = 0.9; // Almost full
 
-  double _sheetPosition = _peek;
-  double _dragStartPosition = 0;
+  double _sheetPosition = 0.35;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +36,7 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
       height: sheetHeight,
       child: GestureDetector(
         onVerticalDragStart: (details) {
-          _dragStartPosition = _sheetPosition;
+          // No-op
         },
         onVerticalDragUpdate: (details) {
           setState(() {
@@ -51,7 +47,7 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
         onVerticalDragEnd: (details) {
           // Snap to nearest position
           final velocity = details.velocity.pixelsPerSecond.dy;
-          
+
           if (velocity.abs() > 500) {
             // Fast swipe
             if (velocity > 0) {
@@ -78,7 +74,7 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.3),
                 blurRadius: 20,
                 offset: const Offset(0, -5),
               ),
@@ -131,7 +127,9 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: isActive ? AppTheme.primaryColor.withOpacity(0.1) : Colors.transparent,
+          color: isActive
+              ? AppTheme.primaryColor.withValues(alpha: 0.1)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isActive ? AppTheme.primaryColor : AppTheme.borderColor,
@@ -192,7 +190,7 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(Icons.add, color: Colors.white, size: 28),
@@ -259,7 +257,7 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: AppTheme.accentColor.withOpacity(0.2),
+              color: AppTheme.accentColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Center(

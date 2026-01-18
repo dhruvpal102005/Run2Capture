@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/models.dart';
 
@@ -24,9 +25,9 @@ class LeaderboardService {
 
         if (userId != null) {
           if (userStats.containsKey(userId)) {
-            userStats[userId]!['totalArea'] = 
+            userStats[userId]!['totalArea'] =
                 (userStats[userId]!['totalArea'] as double) + area;
-            userStats[userId]!['runCount'] = 
+            userStats[userId]!['runCount'] =
                 (userStats[userId]!['runCount'] as int) + 1;
           } else {
             userStats[userId] = {
@@ -54,18 +55,16 @@ class LeaderboardService {
         String? avatarUrl;
 
         try {
-          final userDoc = await _firestore
-              .collection('users')
-              .doc(entry.key)
-              .get();
-          
+          final userDoc =
+              await _firestore.collection('users').doc(entry.key).get();
+
           if (userDoc.exists) {
             final userData = userDoc.data()!;
-            name = userData['name'] as String? ?? 
-                   userData['firstName'] as String? ?? 
-                   'Anonymous';
-            avatarUrl = userData['imageUrl'] as String? ?? 
-                       userData['avatarUrl'] as String?;
+            name = userData['name'] as String? ??
+                userData['firstName'] as String? ??
+                'Anonymous';
+            avatarUrl = userData['imageUrl'] as String? ??
+                userData['avatarUrl'] as String?;
           }
         } catch (e) {
           // User doc might not exist, use default name
@@ -83,7 +82,7 @@ class LeaderboardService {
 
       return leaderboard;
     } catch (e) {
-      print('Error fetching leaderboard: $e');
+      debugPrint('Error fetching leaderboard: $e');
       return [];
     }
   }
@@ -109,7 +108,8 @@ class LeaderboardService {
 
       // Get full leaderboard to determine rank
       final leaderboard = await getAreaLeaderboard(limit: 1000);
-      final userEntry = leaderboard.where((e) => e.userId == userId).firstOrNull;
+      final userEntry =
+          leaderboard.where((e) => e.userId == userId).firstOrNull;
 
       return {
         'rank': userEntry?.rank,
@@ -117,7 +117,7 @@ class LeaderboardService {
         'runCount': userRunCount,
       };
     } catch (e) {
-      print('Error getting user rank: $e');
+      debugPrint('Error getting user rank: $e');
       return {
         'rank': null,
         'totalArea': 0.0,

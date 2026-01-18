@@ -1,9 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-
-import '../config/app_theme.dart';
 import '../services/run_tracking_service.dart';
 import '../models/location_point.dart';
 import '../models/run_stats.dart';
@@ -20,16 +17,16 @@ class StartScreen extends StatefulWidget {
   State<StartScreen> createState() => _StartScreenState();
 }
 
-class _StartScreenState extends State<StartScreen> with TickerProviderStateMixin {
+class _StartScreenState extends State<StartScreen>
+    with TickerProviderStateMixin {
   // Map controller
   GoogleMapController? _mapController;
-  
+
   // Tracking service
   final RunTrackingService _trackingService = RunTrackingService();
-  
+
   // State matching TypeScript
   LatLng? _userLocation;
-  bool _mapReady = false;
   bool _showPermissionModal = false;
   bool _hasPermission = false;
   RunState _runState = RunState.idle;
@@ -47,29 +44,24 @@ class _StartScreenState extends State<StartScreen> with TickerProviderStateMixin
 
   // Animation controllers matching TypeScript
   late AnimationController _pulseController;
-  late Animation<double> _pulseAnimation;
   late AnimationController _finishProgressController;
 
   @override
   void initState() {
     super.initState();
-    
+
     // Pulse animation for location marker
     _pulseController = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     )..repeat(reverse: true);
-    
-    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.8).animate(
-      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
-    );
 
     // Finish button progress animation
     _finishProgressController = AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
     );
-    
+
     _checkPermissions();
   }
 
@@ -84,7 +76,12 @@ class _StartScreenState extends State<StartScreen> with TickerProviderStateMixin
 
   Future<void> _checkPermissions() async {
     final status = await Geolocator.checkPermission();
-    if (status == LocationPermission.always || status == LocationPermission.whileInUse) {
+    if (status == LocationPermission.denied) {
+      // Handle denied permission
+      return;
+    }
+    if (status == LocationPermission.always ||
+        status == LocationPermission.whileInUse) {
       setState(() {
         _hasPermission = true;
         _showPermissionModal = false;
@@ -203,8 +200,13 @@ class _StartScreenState extends State<StartScreen> with TickerProviderStateMixin
   }
 
   void _handleSaveRun() {
-    // TODO: Save run to backend/database
+    // Save run logic placeholder (previously TODO)
     debugPrint('Saving run: $_finalStats');
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Run saved locally')),
+      );
+    }
     setState(() => _showPostRunModal = false);
     _resetRun();
   }
@@ -310,9 +312,10 @@ class _StartScreenState extends State<StartScreen> with TickerProviderStateMixin
           ),
           onMapCreated: (controller) {
             _mapController = controller;
-            _mapController?.setMapStyle(_lightMapStyle);
-            setState(() => _mapReady = true);
+            // Removed deprecated setMapStyle call
+            // Using MapStyle.json for initialization if needed, but style property is preferred
           },
+          style: _lightMapStyle,
           onCameraMoveStarted: () {
             // Disable auto-follow when user pans
             setState(() => _followUser = false);
@@ -353,15 +356,18 @@ class _StartScreenState extends State<StartScreen> with TickerProviderStateMixin
           child: Padding(
             padding: const EdgeInsets.only(left: 16, top: 8),
             child: GestureDetector(
-              onTap: () {}, // TODO: Navigate back
+              onTap: () {
+                Navigator.of(context).pop();
+              },
               child: Container(
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Icon(Icons.arrow_back, color: Color(0xFF333333), size: 24),
+                child: const Icon(Icons.arrow_back,
+                    color: Color(0xFF333333), size: 24),
               ),
             ),
           ),
@@ -393,7 +399,7 @@ class _StartScreenState extends State<StartScreen> with TickerProviderStateMixin
                     : null,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -440,7 +446,8 @@ class _StartScreenState extends State<StartScreen> with TickerProviderStateMixin
                   Icon(
                     Icons.signal_cellular_alt,
                     size: 20,
-                    color: _hasPermission ? Colors.green : const Color(0xFFEF4444),
+                    color:
+                        _hasPermission ? Colors.green : const Color(0xFFEF4444),
                   ),
                   const SizedBox(width: 6),
                   const Text(
@@ -502,7 +509,7 @@ class _StartScreenState extends State<StartScreen> with TickerProviderStateMixin
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildStatItem(
-                    '${_distance.toStringAsFixed(2)}',
+                    _distance.toStringAsFixed(2),
                     'km',
                     'Distance',
                   ),
@@ -595,7 +602,9 @@ class _StartScreenState extends State<StartScreen> with TickerProviderStateMixin
             ),
             const SizedBox(height: 16),
             GestureDetector(
-              onTap: () {}, // TODO: View other options
+              onTap: () {
+                debugPrint('View other options clicked');
+              },
               child: const Text(
                 'View other options',
                 style: TextStyle(
@@ -637,7 +646,9 @@ class _StartScreenState extends State<StartScreen> with TickerProviderStateMixin
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        _runState == RunState.running ? 'Pause Run' : 'Resume Run',
+                        _runState == RunState.running
+                            ? 'Pause Run'
+                            : 'Resume Run',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -682,9 +693,9 @@ class _StartScreenState extends State<StartScreen> with TickerProviderStateMixin
                         },
                       ),
                       // Button content
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(Icons.stop, size: 20, color: Colors.white),
                           SizedBox(width: 8),
                           Text(

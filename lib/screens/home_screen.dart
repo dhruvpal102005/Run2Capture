@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../config/app_theme.dart';
 import 'start_screen.dart';
 import 'play_screen.dart';
 import 'feed_screen.dart';
@@ -16,27 +15,25 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = const [
-    StartScreen(),
-    PlayScreen(),
-    FeedScreen(),
-    MeScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: _screens,
+        children: const [
+          PlayScreen(),
+          MeScreen(),
+          FeedScreen(),
+          StartScreen(),
+        ],
       ),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: AppTheme.surfaceColor,
+        decoration: const BoxDecoration(
+          color: Color(0xFF0D0D0D), // Matching TS styles.tabBar backgroundColor
           border: Border(
             top: BorderSide(
-              color: AppTheme.borderColor.withOpacity(0.3),
-              width: 0.5,
+              color: Colors.transparent, // TS has borderTopWidth: 0
+              width: 0,
             ),
           ),
         ),
@@ -47,10 +44,10 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(0, Icons.directions_run, 'Start'),
-                _buildNavItem(1, Icons.public, 'Play'),
+                _buildNavItem(0, Icons.sports_esports_outlined, 'Play'),
+                _buildNavItem(1, Icons.person_outline, 'Me'),
                 _buildNavItem(2, Icons.people_outline, 'Feed'),
-                _buildNavItem(3, Icons.person_outline, 'Me'),
+                _buildNavItem(3, Icons.directions_run, 'Start'),
               ],
             ),
           ),
@@ -73,7 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
               duration: const Duration(milliseconds: 200),
               child: Icon(
                 icon,
-                color: isSelected ? AppTheme.primaryColor : AppTheme.textMuted,
+                color: isSelected
+                    ? Colors.white
+                    : Colors.white.withValues(
+                        alpha: 0.5), // Matching TS active/inactive tints
                 size: 24,
               ),
             ),
@@ -81,9 +81,13 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? AppTheme.primaryColor : AppTheme.textMuted,
+                color: isSelected
+                    ? Colors.white
+                    : Colors.white.withValues(alpha: 0.5),
                 fontSize: 11,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                fontWeight: isSelected
+                    ? FontWeight.w600
+                    : FontWeight.w500, // Matching TS tabBarLabel fontWeight
               ),
             ),
           ],

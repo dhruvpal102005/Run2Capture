@@ -15,7 +15,7 @@ class GpsPermissionModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black.withOpacity(0.7),
+      color: Colors.black.withValues(alpha: 0.7),
       child: Center(
         child: Container(
           margin: const EdgeInsets.all(32),
@@ -33,7 +33,7 @@ class GpsPermissionModal extends StatelessWidget {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: AppTheme.primaryColor.withOpacity(0.1),
+                  color: AppTheme.primaryColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(40),
                 ),
                 child: const Icon(
@@ -60,7 +60,7 @@ class GpsPermissionModal extends StatelessWidget {
                 'Kapture needs access to your location to track your runs and capture territory. Your location data is only used while running.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.7),
+                  color: Colors.white.withValues(alpha: 0.7),
                   fontSize: 14,
                   height: 1.5,
                 ),
@@ -86,7 +86,7 @@ class GpsPermissionModal extends StatelessWidget {
                   child: Text(
                     'Not Now',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.5),
+                      color: Colors.white.withValues(alpha: 0.5),
                     ),
                   ),
                 ),

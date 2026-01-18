@@ -36,16 +36,19 @@ class TopNavBar extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
-          color: isActive ? Colors.white.withOpacity(0.15) : Colors.transparent,
+          color: isActive
+              ? Colors.white.withValues(alpha: 0.15)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
-          border: isActive 
-              ? Border.all(color: Colors.white.withOpacity(0.3))
+          border: isActive
+              ? Border.all(color: Colors.white.withValues(alpha: 0.3))
               : null,
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isActive ? Colors.white : Colors.white.withOpacity(0.6),
+            color:
+                isActive ? Colors.white : Colors.white.withValues(alpha: 0.6),
             fontSize: 14,
             fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
           ),

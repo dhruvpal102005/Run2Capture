@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 import 'config/app_theme.dart';
@@ -13,12 +12,12 @@ import 'screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize Firebase (matching TypeScript Firebase config)
   await Firebase.initializeApp(
     options: FirebaseConfig.currentPlatform,
   );
-  
+
   runApp(const KaptureApp());
 }
 
@@ -55,12 +54,12 @@ class AuthWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authService = context.watch<AuthService>();
-    
+
     // Loading state - show splash
     if (authService.isLoading) {
       return const SplashScreen();
     }
-    
+
     // Check if user is authenticated
     if (authService.isAuthenticated) {
       // Check if onboarding is complete
@@ -70,7 +69,7 @@ class AuthWrapper extends StatelessWidget {
         return const OnboardingScreen();
       }
     }
-    
+
     // Not authenticated - show sign in
     return const SignInScreen();
   }

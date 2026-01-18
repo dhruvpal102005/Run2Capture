@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user.dart';
 
@@ -45,7 +44,8 @@ class AuthService extends ChangeNotifier {
     if (_firebaseUser == null) return;
 
     try {
-      final doc = await _firestore.collection('users').doc(_firebaseUser!.uid).get();
+      final doc =
+          await _firestore.collection('users').doc(_firebaseUser!.uid).get();
       if (doc.exists) {
         _appUser = AppUser.fromFirestore(doc);
         _isOnboardingComplete = _appUser?.onboardingComplete ?? false;
@@ -92,7 +92,8 @@ class AuthService extends ChangeNotifier {
         return false;
       }
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -126,7 +127,8 @@ class AuthService extends ChangeNotifier {
   }
 
   /// Sign up with email and password
-  Future<bool> signUpWithEmail(String email, String password, String name) async {
+  Future<bool> signUpWithEmail(
+      String email, String password, String name) async {
     try {
       _isLoading = true;
       notifyListeners();
@@ -138,10 +140,10 @@ class AuthService extends ChangeNotifier {
 
       // Update display name
       await credential.user?.updateDisplayName(name);
-      
+
       // Create user document
       await _createUserDocument();
-      
+
       return true;
     } on FirebaseAuthException catch (e) {
       debugPrint('Error signing up: ${e.message}');
@@ -206,7 +208,10 @@ class AuthService extends ChangeNotifier {
       if (unit != null) updates['unit'] = unit;
       if (territoryColor != null) updates['territoryColor'] = territoryColor;
 
-      await _firestore.collection('users').doc(_firebaseUser!.uid).update(updates);
+      await _firestore
+          .collection('users')
+          .doc(_firebaseUser!.uid)
+          .update(updates);
       await _loadUserData();
     } catch (e) {
       debugPrint('Error updating profile: $e');
