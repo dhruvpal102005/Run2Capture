@@ -200,7 +200,7 @@ class _StartScreenState extends State<StartScreen>
   }
 
   void _handleSaveRun() {
-    // Save run logic placeholder (previously TODO)
+    // Placeholder for save run logic
     debugPrint('Saving run: $_finalStats');
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
